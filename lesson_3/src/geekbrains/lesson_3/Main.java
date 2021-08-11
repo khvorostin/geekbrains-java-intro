@@ -9,17 +9,21 @@ public class Main {
     public static void main(String[] args) {
 
         System.out.println("Ваша задача угадать число.");
-        System.out.println("Укажите число, которым вы хотите ограничить диапазон:");
 
-        int range = Scanner.nextInt();
-        int number = (int)(Math.random() * range);
+        int[] levels = {10, 20, 30};
 
-        System.out.println("Угадайте число от 0 до " + range);
-        playLevel(range, number);
+        for (int i = 0, currLevel = 1; i < levels.length; i++, currLevel++) {
+            System.out.println("Уровень " + currLevel + ": угадайте число от 0 до " + levels[i]);
+            playLevel(levels[i]);
+        }
+
         Scanner.close();
     }
 
-    private static void playLevel(int range, int number) {
+    private static void playLevel(int range) {
+        // генерируем число в заданном диапазоне
+        int number = (int)(Math.random() * range);
+
         // счетчик попыток
         int attempts = 0;
 
