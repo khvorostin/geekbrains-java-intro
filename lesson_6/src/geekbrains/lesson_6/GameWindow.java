@@ -3,6 +3,8 @@ package geekbrains.lesson_6;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 /**
@@ -29,6 +31,9 @@ public class GameWindow extends JFrame {
     // скорость движения захватчика
     private static float space_invader_v = 200;
 
+    // очки
+    private static int score = 0;
+
     public static void main(String[] args) throws IOException {
 
         // подгружаем изображения
@@ -50,6 +55,26 @@ public class GameWindow extends JFrame {
 
         // создаём панель и добавляем её на окно
         GameField game_field = new GameField();
+        // добавляем обработку кликов мыши
+        game_field.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                // получаем координаты клика
+                int x = e.getX();
+                int y = e.getY();
+                // определяем доп параметры захватчика
+                float space_invader_right = space_invader_left + space_invader.getWidth(null);
+                float space_invader_bottom = space_invader_top + space_invader.getHeight(null);
+
+                if (space_invader_left <= x && x <= space_invader_right && space_invader_top <= y && y <= space_invader_bottom) {
+                    space_invader_top = -100;
+                    space_invader_left = (int)(Math.random() * (game_field.getWidth() - space_invader.getWidth(null)));
+                    space_invader_v += 20;
+                    score++;
+                    game_window.setTitle("Score " + score);
+                }
+            }
+        });
         game_window.add(game_field);
 
         // делаем окно видимым (по умолчанию, оно невидимо)
@@ -77,10 +102,12 @@ public class GameWindow extends JFrame {
 
         // рисуем захватчика
         space_invader_top = space_invader_top + space_invader_v * delta_time;
-        space_invader_left = space_invader_left + space_invader_v * delta_time;
         G.drawImage(space_invader, (int)space_invader_left, (int)space_invader_top, null);
 
-        // G.drawImage(game_over, 280, 50, null);
+        // если захватчик добрался до нижнего края окна - игра завершена
+        if (space_invader_top > game_window.getHeight()) {
+            G.drawImage(game_over, 500, 40, null);
+        }
     }
 
     /**
