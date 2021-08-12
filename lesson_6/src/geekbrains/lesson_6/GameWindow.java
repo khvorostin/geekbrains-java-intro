@@ -59,13 +59,16 @@ public class GameWindow extends JFrame {
         game_field.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+
                 // получаем координаты клика
                 int x = e.getX();
                 int y = e.getY();
-                // определяем доп параметры захватчика
+
+                // определяем правую и нижнюю границы захватчика
                 float space_invader_right = space_invader_left + space_invader.getWidth(null);
                 float space_invader_bottom = space_invader_top + space_invader.getHeight(null);
 
+                // проверяем, попали ли мы по захватчику
                 if (space_invader_left <= x && x <= space_invader_right && space_invader_top <= y && y <= space_invader_bottom) {
                     space_invader_top = -100;
                     space_invader_left = (int)(Math.random() * (game_field.getWidth() - space_invader.getWidth(null)));
@@ -75,6 +78,7 @@ public class GameWindow extends JFrame {
                 }
             }
         });
+
         game_window.add(game_field);
 
         // делаем окно видимым (по умолчанию, оно невидимо)
